@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Deportivo Vicente Martínez · Villa Alemana</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="https://unpkg.com/lucide@0.468.0"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="tailwind-config.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="min-h-screen w-full flex items-center justify-center sm:p-4 select-none">
+
+    <!-- Marco Principal Móvil Adaptable (Identidad Blanco, Negro y Naranja) -->
+    <div id="app-shell" class="w-full sm:max-w-[430px] h-[100dvh] sm:h-[850px] bg-clubCream sm:rounded-[40px] sm:shadow-2xl sm:border-[6px] sm:border-[#000000] flex flex-col overflow-hidden relative">
+
+        <!-- Cabecera Blanca con Onda Curva Naranja y Sombra Suave -->
+        <header class="bg-white pt-4 pb-6 px-4 relative z-20 shrink-0 border-b-2 border-clubOrange/30 shadow-[0_8px_22px_-10px_rgba(236,102,37,0.28)]"
+                style="border-bottom-left-radius: 50% 24px; border-bottom-right-radius: 50% 24px;">
+            <div class="flex items-center justify-between gap-2">
+                <!-- Insignia Oficial del Club + Botón Cámara Admin -->
+                <div class="relative shrink-0">
+                    <div id="crest-container" class="w-16 h-16 rounded-2xl bg-white border-2 border-clubOrange/30 shadow-sm flex items-center justify-center overflow-hidden p-1">
+                        <!-- SVG Insignia Oficial Vicente Martínez por defecto -->
+                        <svg viewBox="0 0 120 120" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 26 L98 26 L92 78 C89 96 60 109 60 109 C60 109 31 96 28 78 Z" fill="#EC6625" stroke="#111111" stroke-width="4.5"/>
+                            <path d="M12 18 Q60 8 108 18 L102 32 Q60 23 18 32 Z" fill="#FFFFFF" stroke="#111111" stroke-width="3.5"/>
+                            <text x="60" y="25" text-anchor="middle" font-family="Inter, sans-serif" font-weight="900" font-size="10.5" fill="#111111" letter-spacing="1.2">VICENTE</text>
+                            <text x="60" y="64" text-anchor="middle" font-family="Inter, sans-serif" font-weight="900" font-size="30" fill="#FFFFFF" stroke="#111111" stroke-width="1.8">V</text>
+                            <text x="60" y="83" text-anchor="middle" font-family="Inter, sans-serif" font-weight="900" font-size="28" fill="#FFFFFF" stroke="#111111" stroke-width="1.8">M</text>
+                            <path d="M14 82 Q60 95 106 82 L100 96 Q60 108 20 96 Z" fill="#FFFFFF" stroke="#111111" stroke-width="3.5"/>
+                            <text x="60" y="95" text-anchor="middle" font-family="Inter, sans-serif" font-weight="900" font-size="9.5" fill="#111111" letter-spacing="0.8">MARTÍNEZ</text>
+                        </svg>
+                    </div>
+                    <label id="crest-upload-btn" title="Cambiar insignia del club"
+                           class="hidden absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full bg-clubOrange text-white shadow-md border-2 border-white flex items-center justify-center cursor-pointer hover:bg-clubOrangeDark">
+                        <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                        <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'crest')">
+                    </label>
+                </div>
+
+                <!-- Título Deportivo Estilizado en Naranja y Blanco -->
+                <div class="flex-1 text-center min-w-0">
+                    <span class="inline-block px-2.5 py-0.5 rounded-full bg-orange-100 text-clubOrange text-[9px] font-black uppercase tracking-[0.18em]">
+                        Club Deportivo
+                    </span>
+                    <h1 class="text-[19px] sm:text-[21px] font-black uppercase tracking-tight leading-none mt-1 truncate">
+                        <span class="text-gray-900">VICENTE</span>
+                        <span class="text-clubOrange"> MARTÍNEZ</span>
+                    </h1>
+                    <p class="text-[9.5px] font-extrabold text-clubOrange/80 uppercase tracking-[0.16em] mt-1">
+                        Villa Alemana · Valparaíso
+                    </p>
+                </div>
+
+                <!-- Botón Engranaje Administrador -->
+                <button onclick="toggleSettingsModal()" aria-label="Administración y Ajustes"
+                        class="relative w-10 h-10 rounded-2xl bg-orange-100 hover:bg-orange-200 text-clubOrange flex items-center justify-center shrink-0 shadow-xs transition-transform active:scale-95 cursor-pointer">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    <span id="edit-badge-dot" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white"></span>
+                </button>
+            </div>
+
+            <!-- Banner Indicador de Modo Edición Admin Activo -->
+            <div id="edit-mode-banner" class="hidden mt-2.5 py-1.5 px-3 rounded-xl bg-clubOrange text-white text-[10.5px] font-extrabold flex items-center justify-between shadow-xs">
+                <span class="flex items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> ADMIN ACTIVO · GUARDADO AUTOMÁTICO
+                </span>
+                <button onclick="toggleEditMode(false)" class="underline text-white text-[10px] font-black ml-2 cursor-pointer">Salir</button>
+            </div>
+        </header>
+
+        <!-- Área Principal Desplazable -->
+        <main id="main-content" class="flex-1 overflow-y-auto no-scrollbar px-4 pt-4 pb-6 space-y-4">
+            <!-- Renderizado dinámico por JS -->
+        </main>
+
+        <!-- Barra de Navegación Inferior Curva en Blanco y Naranja -->
+        <nav class="bg-white pt-2.5 pb-3.5 px-2 relative z-20 shrink-0 border-t border-orange-100 shadow-[0_-6px_18px_-8px_rgba(0,0,0,0.08)]"
+             style="border-top-left-radius: 50% 22px; border-top-right-radius: 50% 22px;">
+            <div class="grid grid-cols-5 items-center">
+                <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center gap-0.5 py-1.5 rounded-2xl transition-all text-clubOrange cursor-pointer">
+                    <i data-lucide="home" class="w-5 h-5 stroke-[2.3]"></i>
+                    <span class="text-[9.5px] font-extrabold">Inicio</span>
+                </button>
+
+                <button onclick="switchTab('field')" id="nav-field" class="nav-btn flex flex-col items-center gap-0.5 py-1.5 rounded-2xl transition-all text-gray-400 hover:text-clubOrange cursor-pointer">
+                    <i data-lucide="calendar" class="w-5 h-5 stroke-[2.3]"></i>
+                    <span class="text-[9.5px] font-extrabold">Cancha</span>
+                </button>
+
+                <button onclick="switchTab('club')" id="nav-club" class="nav-btn flex flex-col items-center gap-0.5 py-1.5 rounded-2xl transition-all text-gray-400 hover:text-clubOrange cursor-pointer">
+                    <i data-lucide="user" class="w-5 h-5 stroke-[2.3]"></i>
+                    <span class="text-[9.5px] font-extrabold">Directiva</span>
+                </button>
+
+                <button onclick="switchTab('location')" id="nav-location" class="nav-btn flex flex-col items-center gap-0.5 py-1.5 rounded-2xl transition-all text-gray-400 hover:text-clubOrange cursor-pointer">
+                    <i data-lucide="map-pin" class="w-5 h-5 stroke-[2.3]"></i>
+                    <span class="text-[9.5px] font-extrabold">Ubicación</span>
+                </button>
+
+                <button onclick="switchTab('news')" id="nav-news" class="nav-btn flex flex-col items-center gap-0.5 py-1.5 rounded-2xl transition-all text-gray-400 hover:text-clubOrange cursor-pointer">
+                    <i data-lucide="bell" class="w-5 h-5 stroke-[2.3]"></i>
+                    <span class="text-[9.5px] font-extrabold">Avisos</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Modal de Administración (Protegido con PIN persistente) -->
+        <div id="settings-modal" class="hidden absolute inset-0 bg-black/55 backdrop-blur-[2px] z-40 flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-[360px] max-h-[88%] overflow-y-auto no-scrollbar rounded-3xl p-5 shadow-2xl border-2 border-clubOrange/30 fade-in space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-wider text-clubOrange">Panel Exclusivo</span>
+                        <h3 class="text-base font-black text-gray-900">Administración del Club</h3>
+                    </div>
+                    <button onclick="toggleSettingsModal()" class="w-8 h-8 rounded-full bg-orange-100 text-clubOrange flex items-center justify-center hover:bg-clubOrange hover:text-white cursor-pointer">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Interruptor Modo Edición Admin -->
+                <div class="p-3.5 rounded-2xl bg-clubCream border border-orange-200 flex items-center justify-between gap-3">
+                    <div>
+                        <p class="text-xs font-black text-gray-900">Modo Edición Admin</p>
+                        <p class="text-[10.5px] text-gray-600 font-medium">Ingresos, tablas, fotos, directiva y avisos</p>
+                    </div>
+                    <button onclick="handleAdminSwitchClick()" id="edit-toggle-switch" class="w-12 h-7 rounded-full bg-gray-300 p-1 transition-colors flex items-center cursor-pointer shrink-0">
+                        <span id="edit-toggle-knob" class="w-5 h-5 rounded-full bg-white shadow-sm transform translate-x-0 transition-transform"></span>
+                    </button>
+                </div>
+
+                <!-- Caja de Autenticación PIN -->
+                <div id="admin-pin-box" class="hidden p-3.5 rounded-2xl bg-orange-50 border border-clubOrange/40 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <p class="text-[11px] font-black text-clubOrange uppercase tracking-wider">Ingresa tu Código / PIN Admin</p>
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-clubOrange"></i>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="password" id="admin-pin-input" maxlength="10" placeholder="Código PIN"
+                               onkeydown="if(event.key==='Enter') verifyAdminPin()"
+                               class="flex-1 bg-white border border-orange-200 text-gray-900 rounded-xl px-3 py-2 text-xs font-black focus:outline-none focus:ring-2 focus:ring-clubOrange">
+                        <button onclick="verifyAdminPin()" class="px-4 py-2 rounded-xl bg-clubOrange hover:bg-clubOrangeDark text-white font-black text-xs cursor-pointer">
+                            Entrar
+                        </button>
+                    </div>
+                    <p class="text-[10px] text-gray-500">Clave inicial por defecto: <span class="text-clubOrange font-bold" data-cfg="defaultAdminPin">2026</span> (si ya la cambiaste, usa tu clave guardada).</p>
+                </div>
+
+                <!-- Opciones Exclusivas cuando el Admin está autenticado -->
+                <div id="admin-authenticated-panel" class="hidden space-y-3">
+                    <!-- Resumen Rápido Ingresos del Mes (SOLO ADMIN) -->
+                    <div class="p-3.5 rounded-2xl bg-gradient-to-br from-clubOrange to-clubOrangeDark text-white space-y-2.5 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-orange-100">Tesorería · Solo Administrador</span>
+                            <i data-lucide="wallet" class="w-4 h-4 text-white"></i>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-white/15 rounded-xl p-2">
+                                <p class="text-[9px] text-orange-100 uppercase font-bold">Cobrado Mes</p>
+                                <p id="modal-month-collected" class="text-sm font-black text-white">$0</p>
+                            </div>
+                            <div class="bg-white/15 rounded-xl p-2">
+                                <p class="text-[9px] text-orange-100 uppercase font-bold">Por Cobrar</p>
+                                <p id="modal-month-pending" class="text-sm font-black text-amber-200">$0</p>
+                            </div>
+                        </div>
+                        <button onclick="openTreasuryFromModal()" class="w-full py-2 rounded-xl bg-white text-clubOrange hover:bg-orange-50 font-black text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
+                            <i data-lucide="bar-chart-3" class="w-3.5 h-3.5"></i> Ver Ingresos y Rendición del Mes
+                        </button>
+                    </div>
+
+                    <!-- Subir Insignia / Foto Presidente -->
+                    <div class="p-3 rounded-2xl bg-orange-50/70 border border-orange-200 space-y-2">
+                        <p class="text-[10.5px] font-black uppercase text-clubOrange">Imágenes Institucionales (Guardado Permanente)</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="py-2 px-2.5 rounded-xl bg-clubOrange text-white font-extrabold text-[11px] flex items-center justify-center gap-1 cursor-pointer hover:bg-clubOrangeDark">
+                                <i data-lucide="shield" class="w-3.5 h-3.5"></i> Subir Insignia
+                                <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'crest')">
+                            </label>
+                            <label class="py-2 px-2.5 rounded-xl bg-clubOrange text-white font-extrabold text-[11px] flex items-center justify-center gap-1 cursor-pointer hover:bg-clubOrangeDark">
+                                <i data-lucide="user-check" class="w-3.5 h-3.5"></i> Foto Presidente
+                                <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'president')">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Cambiar Código / PIN -->
+                    <div class="p-3 rounded-2xl bg-clubCream border border-orange-200 space-y-2">
+                        <p class="text-[10.5px] font-black text-gray-900 uppercase">Cambiar Código / PIN de Administrador</p>
+                        <div class="flex gap-2">
+                            <input type="text" id="new-admin-pin-input" maxlength="10" placeholder="Escribe tu nuevo PIN"
+                                   class="flex-1 bg-white border border-orange-200 rounded-xl px-3 py-1.5 text-xs font-black text-gray-900 focus:outline-none focus:border-clubOrange">
+                            <button onclick="updateAdminPin()" class="px-3.5 py-1.5 rounded-xl bg-clubOrange hover:bg-clubOrangeDark text-white font-extrabold text-xs cursor-pointer">
+                                Guardar PIN
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Restablecer Datos por Defecto -->
+                    <button onclick="resetAllData()" class="w-full py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 font-extrabold text-[11px] flex items-center justify-center gap-1.5 cursor-pointer">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Restablecer Tablas y Datos Iniciales
+                    </button>
+                </div>
+
+                <div class="pt-2 border-t border-gray-200 text-center space-y-0.5">
+                    <p class="text-[11px] font-extrabold text-clubCarbon">Club Deportivo Vicente Martínez</p>
+                    <p class="text-[10px] text-gray-500" data-cfg="addressFull">Los Eucaliptos 1600, Villa Alemana, Valparaíso</p>
+                    <p id="cloud-sync-status" class="text-[10px] font-bold text-clubOrange">Cambios guardados en este navegador (sin base externa)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Arriendo / Reserva de Cancha (08:00 a 20:00 hrs) -->
+        <div id="booking-modal" class="hidden absolute inset-0 bg-black/65 backdrop-blur-[2px] z-40 flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-[350px] rounded-3xl p-5 shadow-2xl border-2 border-clubCarbon fade-in space-y-3.5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-wider text-clubOrange">Arriendo de Cancha · <span data-cfg="fieldPriceLabel">$20.000</span></span>
+                        <h3 id="booking-modal-subtitle" class="text-base font-black text-clubCarbon">Reservar Horario</h3>
+                    </div>
+                    <button onclick="closeBookingModal()" class="w-8 h-8 rounded-full bg-clubCarbon text-white flex items-center justify-center hover:bg-clubOrange cursor-pointer">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-2.5">
+                    <div>
+                        <label class="block text-[10px] font-extrabold uppercase text-gray-600 mb-1">Bloque Horario (08:00 a 20:00 hrs)</label>
+                        <select id="booking-hour-select" class="w-full bg-clubCream border border-gray-300 rounded-xl px-3 py-2 text-xs font-extrabold text-clubCarbon focus:outline-none focus:border-clubOrange">
+                            <option value="08:00">08:00 hrs</option>
+                            <option value="09:00">09:00 hrs</option>
+                            <option value="10:00">10:00 hrs</option>
+                            <option value="11:00">11:00 hrs</option>
+                            <option value="12:00">12:00 hrs</option>
+                            <option value="13:00">13:00 hrs</option>
+                            <option value="14:00">14:00 hrs</option>
+                            <option value="15:00">15:00 hrs</option>
+                            <option value="16:00">16:00 hrs</option>
+                            <option value="17:00">17:00 hrs</option>
+                            <option value="18:00">18:00 hrs</option>
+                            <option value="19:00">19:00 hrs</option>
+                            <option value="20:00">20:00 hrs</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-extrabold uppercase text-gray-600 mb-1">Equipo o Responsable *</label>
+                        <input type="text" id="booking-team-input" placeholder="Ej: Los Halcones / Carlos Soto"
+                               class="w-full bg-gray-50 border border-gray-300 rounded-xl px-3 py-2 text-xs font-bold text-clubCarbon focus:outline-none focus:border-clubOrange">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[10px] font-extrabold uppercase text-gray-600 mb-1">Teléfono Contacto</label>
+                            <input type="tel" id="booking-phone-input" placeholder="+56 9..."
+                                   class="w-full bg-gray-50 border border-gray-300 rounded-xl px-3 py-2 text-xs font-bold text-clubCarbon focus:outline-none focus:border-clubOrange">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-extrabold uppercase text-gray-600 mb-1">Modalidad</label>
+                            <select id="booking-type-select" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-2.5 py-2 text-xs font-bold text-clubCarbon focus:outline-none focus:border-clubOrange">
+                                <option value="Cancha completa">Cancha completa</option>
+                                <option value="Media cancha">Media cancha</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[10px] font-extrabold uppercase text-gray-600 mb-1">Valor Hora ($ CLP)</label>
+                            <input type="number" id="booking-price-input" value="20000" data-cfg-value="fieldPrice" step="1000"
+                                   class="w-full bg-clubCream border border-gray-300 rounded-xl px-3 py-2 text-xs font-black text-clubCarbon focus:outline-none">
+                        </div>
+                        <div id="booking-status-wrapper" class="hidden">
+                            <label class="block text-[10px] font-extrabold uppercase text-gray-600 mb-1">Estado Pago (Admin)</label>
+                            <select id="booking-status-select" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-2.5 py-2 text-xs font-bold text-clubCarbon focus:outline-none focus:border-clubOrange">
+                                <option value="pending">Por cobrar</option>
+                                <option value="paid">Pagado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-1 flex gap-2">
+                    <button onclick="closeBookingModal()" class="flex-1 py-2.5 rounded-xl bg-gray-100 text-gray-700 font-extrabold text-xs cursor-pointer">
+                        Cancelar
+                    </button>
+                    <button onclick="confirmBookingSubmit()" class="flex-1 py-2.5 rounded-xl bg-clubOrange hover:bg-clubOrangeDark text-white font-black text-xs shadow-sm cursor-pointer">
+                        Confirmar Arriendo
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visor Ampliado de Fotos del Club -->
+        <div id="photo-lightbox" class="hidden absolute inset-0 bg-black/85 backdrop-blur-xs z-50 flex flex-col justify-between p-4 fade-in">
+            <div class="flex items-center justify-between text-white">
+                <span id="lightbox-tag" class="px-3 py-1 rounded-full bg-clubOrange text-[10px] font-black uppercase tracking-wider">Galería VM</span>
+                <button onclick="closePhotoLightbox()" class="w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="lightbox-media" class="my-auto rounded-3xl overflow-hidden shadow-2xl border border-white/15 bg-clubCarbon"></div>
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 text-white">
+                <h4 id="lightbox-title" class="text-sm font-black"></h4>
+                <p id="lightbox-desc" class="text-xs text-gray-300 mt-0.5"></p>
+            </div>
+        </div>
+
+        <!-- Toast Notificación Flotante -->
+        <div id="toast-msg" class="hidden absolute bottom-20 left-1/2 -translate-x-1/2 z-50 bg-clubCarbon text-white text-xs font-extrabold px-4 py-2.5 rounded-full shadow-xl border border-white/10 whitespace-nowrap">
+        </div>
+    </div>
+
+    <!-- Lógica Completa + Firebase Firestore -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>

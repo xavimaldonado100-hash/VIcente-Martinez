@@ -1,0 +1,20 @@
+/* Estilos propios del sitio. Los colores de marca están en js/tailwind-config.js */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #1A1A1A;
+}
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.fade-in {
+    animation: fadeIn 0.22s ease-out forwards;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+    
